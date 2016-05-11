@@ -979,7 +979,9 @@ DxfParser.prototype._parse = function(dxfString) {
 
 		var endingOnValue = forBlock ? 'ENDBLK' : 'ENDSEC';
 
-		curr = scanner.next();
+		if (!forBlock) {
+			curr = scanner.next();
+		}
 		while(true) {
 
 			if(curr.code === 0) {
@@ -1034,6 +1036,10 @@ DxfParser.prototype._parse = function(dxfString) {
 					log.debug('ATTDEF {');
 					entity = parseATTDEF();
 					log.debug('}')
+				} else if(curr.value === 'INSERT') {
+					log.debug('INSERT {');
+					entity = parseINSERT();
+					log.debug('}')
 				} else {
 					log.warn('Unhandled entity ' + curr.value);
 					curr = scanner.next();
@@ -1083,7 +1089,9 @@ DxfParser.prototype._parse = function(dxfString) {
 				break;
 			case 62: // Acad Index Color. 0 inherits ByBlock. 256 inherits ByLayer. Default is bylayer
 				entity.colorIndex = curr.value;
-				entity.color = getAcadColor(Math.abs(curr.value));
+				if (entity.colorIndex !== 0 && entity.colorIndex !== 256){
+					entity.color = getAcadColor(Math.abs(curr.value));
+				}
 				curr = scanner.next();
 				break;
 			case 67:
@@ -1474,6 +1482,73 @@ DxfParser.prototype._parse = function(dxfString) {
 		}
 		return entity;
 	};
+	
+	/**
+	 * Called when the parser reads the beginning of a new entity,
+	 * 0:INSERT. Scanner.next() will return the first attribute of the
+	 * entity.
+	 * @return {Object} the entity parsed
+	 */
+	var parseINSERT = function() {
+		var entity = { type: curr.value };
+		curr = scanner.next();
+		while(curr !== 'EOF') {
+			if(curr.code === 0) break;
+
+			switch(curr.code) {
+				case 66:
+					entity.variableAttributesFollowFlag = curr.value;
+					curr = scanner.next();
+					break;
+				case 2:
+					entity.blockName = curr.value;
+					curr = scanner.next();
+					break;
+				case 10: 
+					entity.insertationPoint = parsePoint();
+					break;
+				case 41:
+					entity.scaleFactorX = curr.value;
+					curr = scanner.next();
+					break;
+				case 42:
+					entity.scaleFactorY = curr.value;
+					curr = scanner.next();
+					break;
+				case 43:
+					entity.scaleFactorZ = curr.value;
+					curr = scanner.next();
+					break;
+				case 50: 
+					entity.rotationAngle = curr.value;
+					curr = scanner.next();
+					break;
+				case 70:
+					entity.columnCount = curr.value;
+					curr = scanner.next();
+					break;
+				case 71:
+					entity.rowCount = curr.value;
+					curr = scanner.next();
+					break;
+				case 44:
+					entity.columnSpacing = curr.value;
+					curr = scanner.next();
+					break;
+				case 45:
+					entity.rowSpacing = curr.value;
+					curr = scanner.next();
+					break;
+				case 210:
+					entity.extrusionDirection = parsePoint();
+					break;
+				default:
+					checkCommonEntityProperties(entity);
+					break;
+			}
+		}
+		return entity;
+	};
 
 	/**
 	 * Called when the parser reads the beginning of a new entity,
@@ -1809,6 +1884,7 @@ module.exports = DxfParser;
 * Licensed under the MIT license.
 */
 (function (root, definition) {
+    "use strict";
     if (typeof module === 'object' && module.exports && typeof require === 'function') {
         module.exports = definition();
     } else if (typeof define === 'function' && typeof define.amd === 'object') {
@@ -1817,7 +1893,7 @@ module.exports = DxfParser;
         root.log = definition();
     }
 }(this, function () {
-    var self = {};
+    "use strict";
     var noop = function() {};
     var undefinedType = "undefined";
 
@@ -1849,13 +1925,31 @@ module.exports = DxfParser;
         }
     }
 
-    function enableLoggingWhenConsoleArrives(methodName, level) {
+    // these private functions always need `this` to be set properly
+
+    function enableLoggingWhenConsoleArrives(methodName, level, loggerName) {
         return function () {
             if (typeof console !== undefinedType) {
-                replaceLoggingMethods(level);
-                self[methodName].apply(self, arguments);
+                replaceLoggingMethods.call(this, level, loggerName);
+                this[methodName].apply(this, arguments);
             }
         };
+    }
+
+    function replaceLoggingMethods(level, loggerName) {
+        /*jshint validthis:true */
+        for (var i = 0; i < logMethods.length; i++) {
+            var methodName = logMethods[i];
+            this[methodName] = (i < level) ?
+                noop :
+                this.methodFactory(methodName, level, loggerName);
+        }
+    }
+
+    function defaultMethodFactory(methodName, level, loggerName) {
+        /*jshint validthis:true */
+        return realMethod(methodName) ||
+               enableLoggingWhenConsoleArrives.apply(this, arguments);
     }
 
     var logMethods = [
@@ -1866,100 +1960,145 @@ module.exports = DxfParser;
         "error"
     ];
 
-    function replaceLoggingMethods(level) {
-        for (var i = 0; i < logMethods.length; i++) {
-            var methodName = logMethods[i];
-            self[methodName] = (i < level) ? noop : self.methodFactory(methodName, level);
-        }
-    }
+    function Logger(name, defaultLevel, factory) {
+      var self = this;
+      var currentLevel;
+      var storageKey = "loglevel";
+      if (name) {
+        storageKey += ":" + name;
+      }
 
-    function persistLevelIfPossible(levelNum) {
-        var levelName = (logMethods[levelNum] || 'silent').toUpperCase();
+      function persistLevelIfPossible(levelNum) {
+          var levelName = (logMethods[levelNum] || 'silent').toUpperCase();
 
-        // Use localStorage if available
-        try {
-            window.localStorage['loglevel'] = levelName;
-            return;
-        } catch (ignore) {}
+          // Use localStorage if available
+          try {
+              window.localStorage[storageKey] = levelName;
+              return;
+          } catch (ignore) {}
 
-        // Use session cookie as fallback
-        try {
-            window.document.cookie = "loglevel=" + levelName + ";";
-        } catch (ignore) {}
-    }
+          // Use session cookie as fallback
+          try {
+              window.document.cookie =
+                encodeURIComponent(storageKey) + "=" + levelName + ";";
+          } catch (ignore) {}
+      }
 
-    function loadPersistedLevel() {
-        var storedLevel;
+      function getPersistedLevel() {
+          var storedLevel;
 
-        try {
-            storedLevel = window.localStorage['loglevel'];
-        } catch (ignore) {}
+          try {
+              storedLevel = window.localStorage[storageKey];
+          } catch (ignore) {}
 
-        if (typeof storedLevel === undefinedType) {
-            try {
-                storedLevel = /loglevel=([^;]+)/.exec(window.document.cookie)[1];
-            } catch (ignore) {}
-        }
-        
-        if (self.levels[storedLevel] === undefined) {
-            storedLevel = "WARN";
-        }
+          if (typeof storedLevel === undefinedType) {
+              try {
+                  var cookie = window.document.cookie;
+                  var location = cookie.indexOf(
+                      encodeURIComponent(storageKey) + "=");
+                  if (location) {
+                      storedLevel = /^([^;]+)/.exec(cookie.slice(location))[1];
+                  }
+              } catch (ignore) {}
+          }
 
-        self.setLevel(self.levels[storedLevel], false);
+          // If the stored level is not valid, treat it as if nothing was stored.
+          if (self.levels[storedLevel] === undefined) {
+              storedLevel = undefined;
+          }
+
+          return storedLevel;
+      }
+
+      /*
+       *
+       * Public API
+       *
+       */
+
+      self.levels = { "TRACE": 0, "DEBUG": 1, "INFO": 2, "WARN": 3,
+          "ERROR": 4, "SILENT": 5};
+
+      self.methodFactory = factory || defaultMethodFactory;
+
+      self.getLevel = function () {
+          return currentLevel;
+      };
+
+      self.setLevel = function (level, persist) {
+          if (typeof level === "string" && self.levels[level.toUpperCase()] !== undefined) {
+              level = self.levels[level.toUpperCase()];
+          }
+          if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
+              currentLevel = level;
+              if (persist !== false) {  // defaults to true
+                  persistLevelIfPossible(level);
+              }
+              replaceLoggingMethods.call(self, level, name);
+              if (typeof console === undefinedType && level < self.levels.SILENT) {
+                  return "No console available for logging";
+              }
+          } else {
+              throw "log.setLevel() called with invalid level: " + level;
+          }
+      };
+
+      self.setDefaultLevel = function (level) {
+          if (!getPersistedLevel()) {
+              self.setLevel(level, false);
+          }
+      };
+
+      self.enableAll = function(persist) {
+          self.setLevel(self.levels.TRACE, persist);
+      };
+
+      self.disableAll = function(persist) {
+          self.setLevel(self.levels.SILENT, persist);
+      };
+
+      // Initialize with the right level
+      var initialLevel = getPersistedLevel();
+      if (initialLevel == null) {
+          initialLevel = defaultLevel == null ? "WARN" : defaultLevel;
+      }
+      self.setLevel(initialLevel, false);
     }
 
     /*
      *
-     * Public API
+     * Package-level API
      *
      */
 
-    self.levels = { "TRACE": 0, "DEBUG": 1, "INFO": 2, "WARN": 3,
-        "ERROR": 4, "SILENT": 5};
+    var defaultLogger = new Logger();
 
-    self.methodFactory = function (methodName, level) {
-        return realMethod(methodName) ||
-               enableLoggingWhenConsoleArrives(methodName, level);
-    };
-
-    self.setLevel = function (level, persist) {
-        if (typeof level === "string" && self.levels[level.toUpperCase()] !== undefined) {
-            level = self.levels[level.toUpperCase()];
+    var _loggersByName = {};
+    defaultLogger.getLogger = function getLogger(name) {
+        if (typeof name !== "string" || name === "") {
+          throw new TypeError("You must supply a name when creating a logger.");
         }
-        if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
-            if (persist !== false) {  // defaults to true
-                persistLevelIfPossible(level);
-            }
-            replaceLoggingMethods(level);
-            if (typeof console === undefinedType && level < self.levels.SILENT) {
-                return "No console available for logging";
-            }
-        } else {
-            throw "log.setLevel() called with invalid level: " + level;
+
+        var logger = _loggersByName[name];
+        if (!logger) {
+          logger = _loggersByName[name] = new Logger(
+            name, defaultLogger.getLevel(), defaultLogger.methodFactory);
         }
-    };
-
-    self.enableAll = function(persist) {
-        self.setLevel(self.levels.TRACE, persist);
-    };
-
-    self.disableAll = function(persist) {
-        self.setLevel(self.levels.SILENT, persist);
+        return logger;
     };
 
     // Grab the current global log variable in case of overwrite
     var _log = (typeof window !== undefinedType) ? window.log : undefined;
-    self.noConflict = function() {
+    defaultLogger.noConflict = function() {
         if (typeof window !== undefinedType &&
-               window.log === self) {
+               window.log === defaultLogger) {
             window.log = _log;
         }
 
-        return self;
+        return defaultLogger;
     };
 
-    loadPersistedLevel();
-    return self;
+    return defaultLogger;
 }));
 
 },{}]},{},[3])(3)
