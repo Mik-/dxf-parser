@@ -1,0 +1,556 @@
+{
+  "header": {
+    "$ACADVER": "AC1021",
+    "$HANDSEED": "20000",
+    "$DWGCODEPAGE": "ANSI_1252",
+    "$INSBASE": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "$EXTMIN": {
+      "x": 70,
+      "y": 0,
+      "z": 0
+    },
+    "$EXTMAX": {
+      "x": 170,
+      "y": 80,
+      "z": 0
+    },
+    "$LIMMIN": {
+      "x": 0,
+      "y": 0
+    },
+    "$LIMMAX": {
+      "x": 420,
+      "y": 297
+    },
+    "$ORTHOMODE": 0,
+    "$LTSCALE": 1,
+    "$TEXTSTYLE": "STANDARD",
+    "$CLAYER": "0",
+    "$DIMASZ": 2.5,
+    "$DIMLFAC": 1,
+    "$DIMSCALE": 1,
+    "$DIMEXO": 0.625,
+    "$DIMEXE": 1.25,
+    "$DIMTXT": 2.5,
+    "$DIMTSZ": 0,
+    "$DIMAUNIT": 0,
+    "$DIMADEC": 0,
+    "$DIMLUNIT": 2,
+    "$DIMSTYLE": "STANDARD",
+    "$DIMGAP": 0.625,
+    "$DIMTIH": 0,
+    "$LUNITS": 2,
+    "$LUPREC": 4,
+    "$AUNITS": 0,
+    "$AUPREC": 2,
+    "$SPLINESEGS": 8,
+    "$GRIDMODE": 1,
+    "$SNAPSTYLE": 0,
+    "$PINSBASE": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "$PLIMMIN": {
+      "x": 0,
+      "y": 0
+    },
+    "$PLIMMAX": {
+      "x": 420,
+      "y": 297
+    },
+    "$INSUNITS": 4,
+    "$PSVPSCALE": 1
+  },
+  "tables": {
+    "viewPort": {
+      "handle": "8",
+      "ownerHandle": "0",
+      "viewPorts": [
+        {
+          "ownerHandle": "2",
+          "name": "*ACTIVE",
+          "lowerLeftCorner": {
+            "x": 0,
+            "y": 0
+          },
+          "upperRightCorner": {
+            "x": 1,
+            "y": 1
+          },
+          "center": {
+            "x": 160,
+            "y": 90.125
+          },
+          "snapBasePoint": {
+            "x": 0,
+            "y": 0
+          },
+          "snapSpacing": {
+            "x": 10,
+            "y": 10
+          },
+          "gridSpacing": {
+            "x": 10,
+            "y": 10
+          },
+          "viewDirectionFromTarget": {
+            "x": 0,
+            "y": 0,
+            "z": 1
+          },
+          "viewTarget": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "lensLength": 50,
+          "frontClippingPlane": 0,
+          "backClippingPlane": 0,
+          "snapRotationAngle": 0,
+          "viewTwistAngle": 0,
+          "renderMode": 0,
+          "ucsOrigin": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "ucsXAxis": {
+            "x": 1,
+            "y": 0,
+            "z": 0
+          },
+          "ucsYAxis": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "orthographicType": 0,
+          "defaultLightingOn": true,
+          "ambientColor": 3358443
+        }
+      ]
+    },
+    "lineType": {
+      "handle": "5",
+      "ownerHandle": "0",
+      "lineTypes": {
+        "ByBlock": {
+          "name": "ByBlock",
+          "description": "",
+          "patternLength": 0
+        },
+        "ByLayer": {
+          "name": "ByLayer",
+          "description": "",
+          "patternLength": 0
+        },
+        "Continuous": {
+          "name": "Continuous",
+          "description": "Solid line",
+          "patternLength": 0
+        },
+        "DOT": {
+          "name": "DOT",
+          "description": "Dot . . . . . . . . . . . . . . . . . . . . . .",
+          "pattern": [
+            0,
+            -6.35
+          ],
+          "patternLength": 6.35
+        },
+        "DOT2": {
+          "name": "DOT2",
+          "description": "Dot (.5x) .....................................",
+          "pattern": [
+            0,
+            -3.175
+          ],
+          "patternLength": 3.175
+        },
+        "DOTX2": {
+          "name": "DOTX2",
+          "description": "Dot (2x) .  .  .  .  .  .  .  .  .  .  .  .  .",
+          "pattern": [
+            0,
+            -12.7
+          ],
+          "patternLength": 12.7
+        },
+        "DASHED": {
+          "name": "DASHED",
+          "description": "Dot . . . . . . . . . . . . . . . . . . . . . .",
+          "pattern": [
+            12.7,
+            -6.35
+          ],
+          "patternLength": 19.05
+        },
+        "DASHED2": {
+          "name": "DASHED2",
+          "description": "Dashed (.5x) _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
+          "pattern": [
+            6.35,
+            -3.175
+          ],
+          "patternLength": 9.525
+        },
+        "DASHEDX2": {
+          "name": "DASHEDX2",
+          "description": "Dashed (2x) ____  ____  ____  ____  ____  ___",
+          "pattern": [
+            25.4,
+            -12.7
+          ],
+          "patternLength": 38.1
+        },
+        "DASHDOT": {
+          "name": "DASHDOT",
+          "description": "Dash dot __ . __ . __ . __ . __ . __ . __ . __",
+          "pattern": [
+            12.7,
+            -6.35,
+            0,
+            -6.35
+          ],
+          "patternLength": 25.4
+        },
+        "DASHDOT2": {
+          "name": "DASHDOT2",
+          "description": "Dash dot (.5x) _._._._._._._._._._._._._._._.",
+          "pattern": [
+            6.35,
+            -3.175,
+            0,
+            -3.175
+          ],
+          "patternLength": 12.7
+        },
+        "DASHDOTX2": {
+          "name": "DASHDOTX2",
+          "description": "Dash dot (2x) ____  .  ____  .  ____  .  ___",
+          "pattern": [
+            25.4,
+            -12.7,
+            0,
+            -12.7
+          ],
+          "patternLength": 50.8
+        },
+        "DIVIDE": {
+          "name": "DIVIDE",
+          "description": "Divide ____ . . ____ . . ____ . . ____ . . ____",
+          "pattern": [
+            12.7,
+            -6.35,
+            0,
+            -6.35,
+            0,
+            -6.35
+          ],
+          "patternLength": 31.75
+        },
+        "DIVIDE2": {
+          "name": "DIVIDE2",
+          "description": "Divide (.5x) __..__..__..__..__..__..__..__.._",
+          "pattern": [
+            6.35,
+            -3.175,
+            0,
+            -3.175,
+            0,
+            -3.175
+          ],
+          "patternLength": 15.875
+        },
+        "DIVIDEX2": {
+          "name": "DIVIDEX2",
+          "description": "Divide (2x) ________  .  .  ________  .  .  _",
+          "pattern": [
+            25.4,
+            -12.7,
+            0,
+            -12.7,
+            0,
+            -12.7
+          ],
+          "patternLength": 63.5
+        },
+        "BORDER": {
+          "name": "BORDER",
+          "description": "Border __ __ . __ __ . __ __ . __ __ . __ __ .",
+          "pattern": [
+            12.7,
+            -6.35,
+            12.7,
+            -6.35,
+            0,
+            -6.35
+          ],
+          "patternLength": 44.45
+        },
+        "BORDER2": {
+          "name": "BORDER2",
+          "description": "Border (.5x) __.__.__.__.__.__.__.__.__.__.__.",
+          "pattern": [
+            6.35,
+            -3.175,
+            6.35,
+            -3.175,
+            0,
+            -3.175
+          ],
+          "patternLength": 22.225
+        },
+        "BORDERX2": {
+          "name": "BORDERX2",
+          "description": "Border (2x) ____  ____  .  ____  ____  .  ___",
+          "pattern": [
+            25.4,
+            -12.7,
+            25.4,
+            -12.7,
+            0,
+            -12.7
+          ],
+          "patternLength": 88.9
+        },
+        "CENTER": {
+          "name": "CENTER",
+          "description": "Center ____ _ ____ _ ____ _ ____ _ ____ _ ____",
+          "pattern": [
+            31.75,
+            -6.35,
+            6.35,
+            -6.35
+          ],
+          "patternLength": 50.8
+        },
+        "CENTER2": {
+          "name": "CENTER2",
+          "description": "Center (.5x) ___ _ ___ _ ___ _ ___ _ ___ _ ___",
+          "pattern": [
+            19.05,
+            -3.175,
+            3.175,
+            -3.175
+          ],
+          "patternLength": 28.575
+        },
+        "CENTERX2": {
+          "name": "CENTERX2",
+          "description": "Center (2x) ________  __  ________  __  _____",
+          "pattern": [
+            63.5,
+            -12.7,
+            12.7,
+            -12.7
+          ],
+          "patternLength": 101.6
+        }
+      }
+    },
+    "layer": {
+      "handle": "2",
+      "ownerHandle": "0",
+      "layers": {
+        "0": {
+          "name": "0",
+          "visible": false,
+          "color": 16777215
+        }
+      }
+    }
+  },
+  "blocks": {
+    "*Model_Space": {
+      "handle": "20",
+      "ownerHandle": "1F",
+      "layer": "0",
+      "name": "*Model_Space",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "name2": "*Model_Space",
+      "xrefPath": ""
+    },
+    "*Paper_Space": {
+      "handle": "1C",
+      "ownerHandle": "1B",
+      "layer": "0",
+      "name": "*Paper_Space",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "name2": "*Paper_Space",
+      "xrefPath": ""
+    },
+    "Circle1": {
+      "handle": "47",
+      "ownerHandle": "46",
+      "layer": "0",
+      "name": "Circle1",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "name2": "Circle1",
+      "xrefPath": "",
+      "entities": [
+        {
+          "type": "CIRCLE",
+          "handle": "4C",
+          "layer": "0",
+          "lineType": "ByLayer",
+          "colorIndex": 256,
+          "lineweight": -1,
+          "center": {
+            "x": 30,
+            "y": 30
+          },
+          "radius": 30
+        }
+      ]
+    },
+    "Rect1": {
+      "handle": "4A",
+      "ownerHandle": "49",
+      "layer": "0",
+      "name": "Rect1",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "name2": "Rect1",
+      "xrefPath": "",
+      "entities": [
+        {
+          "type": "LINE",
+          "vertices": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 80
+            }
+          ],
+          "handle": "4D",
+          "layer": "0",
+          "lineType": "ByLayer",
+          "colorIndex": 256,
+          "lineweight": -1
+        },
+        {
+          "type": "LINE",
+          "vertices": [
+            {
+              "x": 0,
+              "y": 80
+            },
+            {
+              "x": 100,
+              "y": 80
+            }
+          ],
+          "handle": "4E",
+          "layer": "0",
+          "lineType": "ByLayer",
+          "colorIndex": 256,
+          "lineweight": -1
+        },
+        {
+          "type": "LINE",
+          "vertices": [
+            {
+              "x": 100,
+              "y": 80
+            },
+            {
+              "x": 100,
+              "y": 0
+            }
+          ],
+          "handle": "4F",
+          "layer": "0",
+          "lineType": "ByLayer",
+          "colorIndex": 256,
+          "lineweight": -1
+        },
+        {
+          "type": "LINE",
+          "vertices": [
+            {
+              "x": 100,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "handle": "50",
+          "layer": "0",
+          "lineType": "ByLayer",
+          "colorIndex": 256,
+          "lineweight": -1
+        }
+      ]
+    }
+  },
+  "entities": [
+    {
+      "type": "INSERT",
+      "handle": "51",
+      "layer": "0",
+      "lineType": "ByLayer",
+      "colorIndex": 256,
+      "lineweight": -1,
+      "blockName": "Circle1",
+      "insertationPoint": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scaleFactorX": 1,
+      "scaleFactorY": 1,
+      "scaleFactorZ": 0,
+      "rotationAngle": 0,
+      "columnCount": 1,
+      "rowCount": 1,
+      "columnSpacing": 1,
+      "rowSpacing": 1
+    },
+    {
+      "type": "INSERT",
+      "handle": "52",
+      "layer": "0",
+      "lineType": "ByLayer",
+      "colorIndex": 256,
+      "lineweight": -1,
+      "blockName": "Rect1",
+      "insertationPoint": {
+        "x": 70,
+        "y": 0,
+        "z": 0
+      },
+      "scaleFactorX": 1,
+      "scaleFactorY": 1,
+      "scaleFactorZ": 0,
+      "rotationAngle": 0,
+      "columnCount": 1,
+      "rowCount": 1,
+      "columnSpacing": 1,
+      "rowSpacing": 1
+    }
+  ]
+}

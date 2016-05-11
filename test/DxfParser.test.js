@@ -79,7 +79,7 @@ describe('Parser', function() {
 
 		var expected = fs.readFileSync(path.join(__dirname,'data','blocks.expected.json'), {encoding: 'utf8'});
 		dxf.should.eql(JSON.parse(expected));
-	});
+	}); 
 	
 	it('should parse a simple BLOCKS section', function() {
 		var file = fs.readFileSync(path.join(__dirname, 'data', 'blocks2.dxf'), 'utf8');
@@ -97,7 +97,7 @@ describe('Parser', function() {
 
 		var expected = fs.readFileSync(path.join(__dirname, 'data', 'blocks2.expected.json'), {encoding: 'utf8'});
 		dxf.should.eql(JSON.parse(expected));
-	});
+	}); 
     
     it('should parse POLYLINES', function() {
         var file = fs.readFileSync(path.join(__dirname, 'data', 'polylines.dxf'), 'utf8');
@@ -114,6 +114,24 @@ describe('Parser', function() {
 
 
 		var expected = fs.readFileSync(path.join(__dirname, 'data', 'polylines.expected.json'), {encoding: 'utf8'});
+		dxf.should.eql(JSON.parse(expected));
+    });
+   
+    it('should parse INSERT', function() {
+        var file = fs.readFileSync(path.join(__dirname, 'data', 'blocks3.dxf'), 'utf8');
+
+		var parser = new DxfParser();
+		var dxf;
+		try {
+			dxf = parser.parseSync(file);
+			fs.writeFileSync(path.join(__dirname, 'data', 'blocks3.actual.json'), JSON.stringify(dxf, null, 2));
+		}catch(err) {
+			should.not.exist(err);
+		}
+		should.exist(dxf);
+
+
+		var expected = fs.readFileSync(path.join(__dirname, 'data', 'blocks3.expected.json'), {encoding: 'utf8'});
 		dxf.should.eql(JSON.parse(expected));
     });
 });
